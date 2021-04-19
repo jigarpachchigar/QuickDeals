@@ -126,6 +126,22 @@ public class QdUserSignIn extends Fragment {
             }
         });
 
+        // Show / Hide Password
+        showpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isPasswordShown) {
+                    password.setTransformationMethod(new PasswordTransformationMethod());
+                    showpassword.setImageResource(R.drawable.ic_eye_off_grey600_24dp);
+                    isPasswordShown = false;
+                } else {
+                    password.setTransformationMethod(null);
+                    showpassword.setImageResource(R.drawable.ic_eye_white_24dp);
+                    isPasswordShown = true;
+                }
+            }
+        });
+
 
     }
 
