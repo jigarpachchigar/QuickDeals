@@ -142,7 +142,21 @@ public class QdUserSignIn extends Fragment {
             }
         });
 
+    }
 
+    // Show Error Toast
+    private void showErrorToast(String value) {
+        Toast.makeText(getActivity(), value + getResources().getString(R.string.BlankError), Toast.LENGTH_LONG).show();
+    }
+
+    // Show Error Toast - Email Not Valid
+    private void showErrorToastEmailNotValid() {
+        Toast.makeText(getActivity(), R.string.EmailError, Toast.LENGTH_LONG).show();
+    }
+
+    // Show Invalid User
+    private void showInvalidUser() {
+        Toast.makeText(getActivity(), R.string.InvalidUser, Toast.LENGTH_LONG).show();
     }
 
 
