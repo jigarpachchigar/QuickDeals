@@ -34,14 +34,36 @@ public class QdUserAccount extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.qdeals_user_account, container, false);
 
-        // Get User
-
         User user = db_handler.getUser(sessionManager.getSessionData(Constants.SESSION_EMAIL));
 
+        // Set Values
+        setIds(view);
+        setValues(user);
+        setClickListeners();
 
         return view;
     }
 
+    // Set Ids
+    private void setIds(View view) {
+        logoutLay = view.findViewById(R.id.logoutLay);
+        name = view.findViewById(R.id.name);
+        email = view.findViewById(R.id.email);
+        mobile = view.findViewById(R.id.mobile);
+        orders = view.findViewById(R.id.myOrdersLay);
+    }
+
+    // Set Values
+    private void setValues(User user) {
+        // Name
+        name.setText(user.getName());
+
+        // Email
+        email.setText(user.getEmail());
+
+        // Mobile
+        mobile.setText(user.getMobile());
+    }
 
 
 }
