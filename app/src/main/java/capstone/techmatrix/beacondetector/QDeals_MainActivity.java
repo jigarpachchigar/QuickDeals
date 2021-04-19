@@ -54,7 +54,38 @@ public class QDeals_MainActivity extends AppCompatActivity implements QdProdSubC
 
     }
 
+    private void backButtonClick() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        try {
+            if (fragmentManager.findFragmentByTag(Constants.FRAG_PDT).isVisible()) {
+                // add bundle arguments
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.TITLE,subCategoryTitle);
+                bundle.putSerializable(Constants.CAT_KEY, (Serializable) childCategories);
 
+                QdProdSubCategory subcategories = new QdProdSubCategory();
+                subcategories.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.content, subcategories,Constants.FRAG_SUBCAT);
+                fragmentTransaction.commit();
+                return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (fragmentManager.findFragmentByTag(Constants.FRAG_SUBCAT).isVisible()) {
+                fragmentTransaction.replace(R.id.content, new QdProdCategory());
+                fragmentTransaction.commit();
+                titleToolbar.setText(R.string.TitleCategories);
+                backButton.setVisibility(View.INVISIBLE);
+            }
+        } catch (NullPointerException e) {
+            super.onBackPressed();
+        }
+    }
 
 
 }
