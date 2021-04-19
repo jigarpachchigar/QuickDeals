@@ -13,4 +13,10 @@
     <string name="buy">Buy now</string>
     <string name="cart">Add to cart</string>
 
+    <string name="sort">SORT</string>
+    <string name="filter">FILTER</string>
+    <string name="filters">Filters</string>
+    <string name="apply">Apply</string>
+    <string name="clear">Clear All</string>
+
 </resources>
