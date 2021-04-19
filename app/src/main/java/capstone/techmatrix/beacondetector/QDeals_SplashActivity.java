@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 
-
+import capstone.techmatrix.beacondetector.database.DB_Handler;
 import capstone.techmatrix.beacondetector.database.SessionManager;
 import capstone.techmatrix.beacondetector.fragments.QdUserSignIn;
 import capstone.techmatrix.beacondetector.fragments.QdUserSignup;
@@ -29,7 +29,9 @@ import capstone.techmatrix.beacondetector.utils.Constants;
 
 public class QDeals_SplashActivity extends AppCompatActivity implements FinishActivity {
 
+    DB_Handler db_handler;
     Button signIn, signUp;
+    Handler handler;
     TableLayout bottomLay;
     Snackbar snackbar = null;
     CoordinatorLayout coordinatorLayout;
@@ -38,6 +40,13 @@ public class QDeals_SplashActivity extends AppCompatActivity implements FinishAc
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qdeals_activity_splash);
+
+        // Service To Fetch Data From URL
+        setHandler();
+        startIntentService();
+
+        // Initialize DB Handler
+        db_handler = new DB_Handler(this);
 
         setIds();
         setClickListeners();
@@ -80,6 +89,12 @@ public class QDeals_SplashActivity extends AppCompatActivity implements FinishAc
         });
     }
 
+    // Start Intent Service To Fetch Data
+    private void startIntentService() {
+        Intent intent = new Intent(getApplicationContext(), SyncDBService.class);
+        intent.putExtra("messenger", new Messenger(handler));
+        startService(intent);
+    }
 
     // Check Session
     private void checkSession() {
@@ -102,6 +117,45 @@ public class QDeals_SplashActivity extends AppCompatActivity implements FinishAc
         startActivity(i);
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    // Handler To Receive Data From Service
+    @SuppressLint("HandlerLeak")
+    private void setHandler() {
+        try {
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    Bundle reply = msg.getData();
+                    if (reply.getString("message").equals("success")) {
+                        checkSession();
+                    } else {
+                        // Show Error In Snack Bar
+                        try {
+                            String message = reply.getString("message");
+                            assert message != null;
+                            snackbar = Snackbar
+                                    .make(coordinatorLayout, message, Snackbar.LENGTH_INDEFINITE)
+                                    .setAction(R.string.retry, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            snackbar.dismiss();
+                                            startIntentService();
+                                        }
+                                    });
+
+                            // Changing message text color
+                            snackbar.setActionTextColor(Color.RED);
+                            snackbar.show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
