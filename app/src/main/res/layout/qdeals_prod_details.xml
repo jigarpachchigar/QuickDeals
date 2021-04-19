@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/border">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLay"
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="225dp"
+                    android:background="@color/stroke"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_image_grey600_36dp" />
+
+                <ImageView
+                    android:id="@+id/heart"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:layout_width="@dimen/ProductWishIconSize"
+                    android:layout_height="@dimen/ProductWishIconSize"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/defaultMargin"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_heart_grey600_24dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/border" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/defaultMargin"
+                android:layout_marginRight="@dimen/defaultMargin"
+                android:layout_marginTop="@dimen/defaultMargin"
+                android:text="Sample Text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/ProductTitle" />
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/defaultMargin"
+                android:text="$ 0000"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/ProductPrice"
+                android:textStyle="bold" />
+
+            <include layout="@layout/border" />
+
+            <LinearLayout
+                android:id="@+id/sizeParentLay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginRight="@dimen/defaultMargin"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:text="Size"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/ProductTitle" />
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:id="@+id/sizesLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/defaultMargin" />
+
+                <include layout="@layout/border" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/colorParentLay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginRight="@dimen/defaultMargin"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:text="Color"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/ProductTitle" />
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:id="@+id/colorsLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/defaultMargin" />
+
+                <include layout="@layout/border" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/defaultMargin"
+                android:layout_marginRight="@dimen/defaultMargin"
+                android:layout_marginTop="@dimen/defaultMargin"
+                android:text="Quantity"
+                android:textColor="@color/black"
+                android:textSize="@dimen/ProductTitle" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/defaultMargin"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/minus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:src="@drawable/ic_minus_circle_outline_grey600_18dp" />
+
+                <TextView
+                    android:id="@+id/quantityValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginRight="@dimen/defaultMargin"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/ProductPrice" />
+
+                <ImageView
+                    android:id="@+id/plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:src="@drawable/ic_plus_circle_outline_grey600_18dp" />
+            </LinearLayout>
+
+            <include layout="@layout/border" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TableLayout
+        android:id="@+id/bottomLay"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:stretchColumns="1">
+
+        <TableRow android:background="@color/white">
+
+            <Button
+                android:id="@+id/cartButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/halfMargin"
+                android:layout_marginLeft="@dimen/halfMargin"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="@dimen/halfMargin"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner"
+                android:text="@string/cart"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/product_detail_button" />
+
+            <Button
+                android:id="@+id/buyNow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/halfMargin"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="@dimen/halfMargin"
+                android:layout_marginTop="@dimen/halfMargin"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_corner_blue"
+                android:text="@string/buy"
+                android:textColor="@color/white"
+                android:textSize="@dimen/product_detail_button" />
+
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>
