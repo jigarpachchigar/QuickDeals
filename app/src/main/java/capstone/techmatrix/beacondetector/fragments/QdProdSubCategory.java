@@ -55,6 +55,17 @@ public class QdProdSubCategory extends Fragment {
         toolbarTitleCallback.setToolbarTitle(args.getString(Constants.TITLE));
         toolbarTitleCallback.saveSubcategoryTitle(args.getString(Constants.TITLE));
 
+        // fill gridview with data
+        GridView gv = view.findViewById(R.id.productsGrid);
+        assert childCategories != null;
+        if (childCategories.size() >= 3) {
+            gv.setNumColumns(3);
+        } else if (childCategories.size() >= 2) {
+            gv.setNumColumns(2);
+        } else {
+            gv.setNumColumns(1);
+        }
+        gv.setAdapter(new QdProdSubCatAdapter(getActivity(), childCategories));
 
         return view;
     }
