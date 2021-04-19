@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Capstone_TechMatrix_BeaconDetector</string>
+
+    <string name="app_name">QuickDeals</string>
+    <string name="splash_text">QuickDeals</string>
+
+    <string name="signin">Sign In</string>
+    <string name="signup">Sign Up</string>
+    <string name="name">Full Name</string>
+    <string name="email">Email Id</string>
+    <string name="password">Password</string>
+    <string name="mobile">Contact</string>
 </resources>

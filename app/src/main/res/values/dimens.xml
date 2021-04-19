@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="SplashText">24sp</dimen>
+    <dimen name="ProductImageHeight">200dp</dimen>
+    <dimen name="ProductTitle">14sp</dimen>
+    <dimen name="ProductPrice">16sp</dimen>
+    <dimen name="SubCategorySize">12sp</dimen>
+    <dimen name="SubCategoryImageSize">64sp</dimen>
+    <dimen name="defaultMargin">8dp</dimen>
+    <dimen name="gridBorderWidth">1dp</dimen>
+    <dimen name="filter">14sp</dimen>
+    <dimen name="sort_filter_height">48dp</dimen>
+    <dimen name="product_detail_button">16sp</dimen>
+    <dimen name="account_name">18sp</dimen>
+    <dimen name="ProductWishIconSize">48dp</dimen>
+    <dimen name="CategoryTitleSize">16sp</dimen>
+    <dimen name="account_title">16sp</dimen>
+    <dimen name="account_content">14sp</dimen>
+    <dimen name="payable_amt">14sp</dimen>
+    <dimen name="reg_edittext">16sp</dimen>
+    <dimen name="reg_title">14sp</dimen>
+    <dimen name="app_default">16sp</dimen>
+    <dimen name="halfMargin">4dp</dimen>
+    <dimen name="sortMain">14sp</dimen>
+    <dimen name="sortSub">10sp</dimen>
+</resources>
