@@ -10,6 +10,9 @@
     <string name="password">Password</string>
     <string name="mobile">Contact</string>
 
+    <string name="place_order">Place Order</string>
+    <string name="shopping_cart">Shopping Cart</string>
+
     <string name="buy">Buy now</string>
     <string name="cart">Add to cart</string>
 
