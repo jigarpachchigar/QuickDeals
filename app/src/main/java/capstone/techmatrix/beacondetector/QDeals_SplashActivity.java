@@ -18,17 +18,18 @@ import android.widget.Button;
 import android.widget.TableLayout;
 
 
+import capstone.techmatrix.beacondetector.database.SessionManager;
 import capstone.techmatrix.beacondetector.fragments.QdUserSignIn;
 import capstone.techmatrix.beacondetector.fragments.QdUserSignup;
 import capstone.techmatrix.beacondetector.interfaces.FinishActivity;
 import capstone.techmatrix.beacondetector.service.SyncDBService;
 import capstone.techmatrix.beacondetector.utils.Constants;
 
+
+
 public class QDeals_SplashActivity extends AppCompatActivity implements FinishActivity {
 
-    DB_Handler db_handler;
     Button signIn, signUp;
-    Handler handler;
     TableLayout bottomLay;
     Snackbar snackbar = null;
     CoordinatorLayout coordinatorLayout;
@@ -80,5 +81,32 @@ public class QDeals_SplashActivity extends AppCompatActivity implements FinishAc
     }
 
 
+    // Check Session
+    private void checkSession() {
+        SessionManager sessionManager = new SessionManager(this);
+        if (sessionManager.getSessionData(Constants.SESSION_EMAIL) != null && sessionManager.getSessionData(Constants.SESSION_EMAIL).trim().length() > 0) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadNextActivity();
+                }
+            }, 1000);
+        } else {
+            bottomLay.setVisibility(View.VISIBLE);
+        }
+    }
 
+    // Load Next Activity
+    private void loadNextActivity() {
+        Intent i = new Intent(getApplicationContext(), QDeals_MainActivity.class);
+        startActivity(i);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+    @Override
+    public void finishActivity() {
+        overridePendingTransition(0, 0);
+        finish();
+    }
 }
