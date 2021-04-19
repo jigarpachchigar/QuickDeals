@@ -17,8 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 
-import capstone.techmatrix.beacondetector.database.DB_Handler;
-import capstone.techmatrix.beacondetector.database.SessionManager;
+
 import capstone.techmatrix.beacondetector.fragments.QdUserSignIn;
 import capstone.techmatrix.beacondetector.fragments.QdUserSignup;
 import capstone.techmatrix.beacondetector.interfaces.FinishActivity;
@@ -27,6 +26,7 @@ import capstone.techmatrix.beacondetector.utils.Constants;
 
 public class QDeals_SplashActivity extends AppCompatActivity implements FinishActivity {
 
+    DB_Handler db_handler;
     Button signIn, signUp;
     Handler handler;
     TableLayout bottomLay;
@@ -35,7 +35,6 @@ public class QDeals_SplashActivity extends AppCompatActivity implements FinishAc
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qdeals_activity_splash);
 
@@ -51,6 +50,34 @@ public class QDeals_SplashActivity extends AppCompatActivity implements FinishAc
         coordinatorLayout = findViewById(R.id.coordinatorLay);
     }
 
+    // Set Click Listeners
+    private void setClickListeners() {
+        // Sign In
+        signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                ft.replace(R.id.fragment, new QdUserSignIn());
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
+
+        // Sign Up
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                ft.replace(R.id.fragment, new QdUserSignup());
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
+    }
 
 
 
