@@ -65,5 +65,30 @@ public class QdUserAccount extends Fragment {
         mobile.setText(user.getMobile());
     }
 
+    // Set Click Listeners
+    private void setClickListeners() {
+        // My Orders
+        orders.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("ConstantConditions")
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), QDealsOrders_Activity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(0,0);
+            }
+        });
 
+        // Logout
+        logoutLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SessionManager sessionManager = new SessionManager(getActivity());
+                sessionManager.clearPreferences();
+                Intent intent = new Intent(getActivity(), QDeals_SplashActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finishActivityCallback.finishActivity();
+            }
+        });
+    }
 }
