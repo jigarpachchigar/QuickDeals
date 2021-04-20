@@ -852,7 +852,6 @@ public class DB_Handler extends SQLiteOpenHelper {
 
     // Insert Order
     public void insertOrderHistory(List<Cart> shoppingCart, String email) {
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         for (int i = 0; i < shoppingCart.size(); i++) {
@@ -864,6 +863,51 @@ public class DB_Handler extends SQLiteOpenHelper {
             db.insert(QDUserOrder, null, values);
         }
         db.close();
+    }
+
+    // Add Item Into Wish List
+    public long shortlistItem(int pdt_id, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PDT_ID, pdt_id);
+        values.put(EMAIL, email);
+        return db.insert(QDWishlist, null, values);
+    }
+
+    // Remove Item From Wish List
+    public boolean removeShortlistedItem(int pdt_id, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(QDWishlist, PDT_ID + "=? AND " + EMAIL + "=?", new String[]{String.valueOf(pdt_id), email}) > 0;
+    }
+
+    // Get Wishlist Items
+    public List<Product> getShortListedItems(String email) {
+        List<Product> productList = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + QDWishlist + " WHERE " + EMAIL + "=?";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{email});
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                int pdt_id = cursor.getInt(cursor.getColumnIndex(PDT_ID));
+                Product product = getProductDetailsById(pdt_id, email);
+                String priceRange = getProductPriceRangeById(pdt_id);
+                product.setPrice_range(priceRange);
+
+                // Adding to list
+                productList.add(product);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        // return product list
+        return productList;
     }
 
 
