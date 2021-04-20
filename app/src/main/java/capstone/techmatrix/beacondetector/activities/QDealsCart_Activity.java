@@ -88,6 +88,24 @@ public class QDealsCart_Activity extends AppCompatActivity implements Qdshopcart
         });
     }
 
+    // Calculate Payable Amount
+    @SuppressLint("SetTextI18n")
+    private void setPayableAmount(List<Cart> shoppingCart) {
+        Double totalAmount = 0.0;
+        for (int i = 0; i < shoppingCart.size(); i++) {
+            int itemQuantity = shoppingCart.get(i).getItemQuantity();
+            Double tax = shoppingCart.get(i).getProduct().getTax().getValue();
+            Double price = Double.valueOf(shoppingCart.get(i).getVariant().getPrice());
+            price = (price + tax) * itemQuantity;
+            totalAmount = totalAmount + price;
+        }
+
+        // Set Value
+        DecimalFormat formatter = new DecimalFormat("#,###.00");
+        TextView payable = findViewById(R.id.payableAmt);
+        payable.setText("CAD "+formatter.format(totalAmount));
+    }
+
 
 
     // finish activity if cart empty
