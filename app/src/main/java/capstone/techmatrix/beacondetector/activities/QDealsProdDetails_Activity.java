@@ -78,10 +78,30 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
         // Get Product Id
         int id = getIntent().getIntExtra("ProductId", 0);
 
+        // Get Product Details By Id
+        db_handler = new DB_Handler(this);
+        product = db_handler.getProductDetailsById(id, userEmail);
 
+        setIds();
+        setValues();
+        setToolbarIconsClickListeners();
+        setQuantityUpdateListeners();
+        setBottomPanelClickListeners();
     }
 
-
+    // Set Ids
+    private void setIds() {
+        buyNow = findViewById(R.id.buyNow);
+        cart = findViewById(R.id.cartButton);
+        colorParentLay = findViewById(R.id.colorParentLay);
+        sizeParentLay = findViewById(R.id.sizeParentLay);
+        colorsLay = findViewById(R.id.colorsLay);
+        sizeLay = findViewById(R.id.sizesLay);
+        price = findViewById(R.id.price);
+        quantityValue = findViewById(R.id.quantityValue);
+        minus = findViewById(R.id.minus);
+        plus = findViewById(R.id.plus);
+    }
 
     // Set Toolbar Icons Click Listeners
     private void setToolbarIconsClickListeners() {
@@ -98,7 +118,29 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
         });
     }
 
+    // Set Bottom Panel Click Listeners
+    private void setBottomPanelClickListeners() {
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isSuccessAddingToCart(false)) {
+                    Toast.makeText(getApplicationContext(), R.string.add_success, Toast.LENGTH_LONG).show();
+                    updateCartCount();
+                }
+            }
+        });
 
+        // Buy Now
+        buyNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isSuccessAddingToCart(true)) {
+                    startActivity(new Intent(getApplicationContext(), QDealsCart_Activity.class));
+                    overridePendingTransition(0, 0);
+                }
+            }
+        });
+    }
 
     // Get Item Adding To Cart Status
     private boolean isSuccessAddingToCart(boolean isBuyNow) {
@@ -128,98 +170,35 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
     }
 
 
-    private void setColorLayout(final List<String> colorList) {
-        colorsLay.removeAllViews();
-        try {
-            if (colorList.size() > 0) {
-                for (int i = 0; i < colorList.size(); i++) {
-                    final TextView color = new TextView(this);
-                    color.setText(colorList.get(i));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        color.setBackground(getResources().getDrawable(R.drawable.border_grey));
-                    } else {
-                        color.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_grey));
-                    }
 
-                    try {
-                        if (selectedColor.equals(colorList.get(i))) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                color.setBackground(getResources().getDrawable(R.drawable.border_blue));
-                            } else {
-                                color.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_blue));
-                            }
-                        }
-                    } catch (NullPointerException ignore) {
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        color.setTextColor(getResources().getColor(R.color.black, null));
-                    } else {
-                        color.setTextColor(getResources().getColor(R.color.black));
-                    }
-                    color.setFocusableInTouchMode(false);
-                    color.setFocusable(true);
-                    color.setClickable(true);
-                    color.setTextSize(16);
-
-                    int dpValue = 8; // margin in dips
-                    float d = getResources().getDisplayMetrics().density;
-                    int margin = (int) (dpValue * d); // margin in pixels
-                    FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT,
-                            FlowLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(margin, margin, 0, 0);
-                    color.setLayoutParams(params);
-                    colorsLay.addView(color);
-
-                    // Size Click Listener
-                    color.setOnClickListener(new View.OnClickListener() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onClick(View view) {
-
-                            try {
-                                // Get Selected Item Price
-                                if (selectedSize.equals("-") || selectedSize != null) {
-                                    TextView textView = (TextView) view;
-                                    selectedColor = textView.getText().toString();
-
-                                    Variant variant;
-                                    if (selectedSize.equals("-")) // no size for product
-                                    {
-                                        variant = db_handler.getProductVariant(product.getId(), null, selectedColor);
-                                        selectedItemPrice = variant.getPrice();
-                                    } else {
-                                        variant = db_handler.getProductVariant(product.getId(), selectedSize, selectedColor);
-                                        selectedItemPrice = variant.getPrice();
-                                    }
-
-                                    selectedItemVariantId = variant.getId();
-                                    price.setText("CAD " + selectedItemPrice);
-                                    setColorLayout(colorList); // reload to refresh background
-                                } else {
-                                    Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
-                                }
-                            } catch (NullPointerException e) {
-                                Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
+    // Quantity Update Listeners
+    private void setQuantityUpdateListeners() {
+        // Decrement Listener
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedItemQuantity != 1) {
+                    selectedItemQuantity--;
+                    quantityValue.setText(String.valueOf(selectedItemQuantity));
                 }
-            } else {
-                colorParentLay.setVisibility(View.GONE);
             }
-        } catch (NullPointerException e) {
-            colorParentLay.setVisibility(View.GONE);
-        }
+        });
+
+        // Increment Listener
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedItemQuantity++;
+                quantityValue.setText(String.valueOf(selectedItemQuantity));
+            }
+        });
     }
-
-
 
     @Override
     protected void onResume() {
         super.onResume();
 
     }
-
 
 
     @Override
