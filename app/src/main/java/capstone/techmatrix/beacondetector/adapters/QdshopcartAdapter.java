@@ -80,6 +80,7 @@ public class QdshopcartAdapter extends BaseAdapter {
         holder.plus = rowView.findViewById(R.id.plus);
         holder.img = rowView.findViewById(R.id.img);
 
+
         holder.title.setText(shoppingCart.get(position).getProduct().getName());
         holder.color.setText("Color: " + shoppingCart.get(position).getVariant().getColor());
 

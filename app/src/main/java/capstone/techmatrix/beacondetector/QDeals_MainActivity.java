@@ -2,20 +2,30 @@ package capstone.techmatrix.beacondetector;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import capstone.techmatrix.beacondetector.activities.QDealsCart_Activity;
+import capstone.techmatrix.beacondetector.database.DB_Handler;
 import capstone.techmatrix.beacondetector.database.SessionManager;
+import capstone.techmatrix.beacondetector.fragments.QdProdCategory;
+import capstone.techmatrix.beacondetector.fragments.QdProdSubCategory;
+import capstone.techmatrix.beacondetector.fragments.QdUserAccount;
 import capstone.techmatrix.beacondetector.fragments.QdProducts;
+import capstone.techmatrix.beacondetector.fragments.QdUserWishlist;
 import capstone.techmatrix.beacondetector.interfaces.FinishActivity;
 import capstone.techmatrix.beacondetector.interfaces.ShowBackButton;
 import capstone.techmatrix.beacondetector.interfaces.ToolbarTitle;
@@ -25,9 +35,10 @@ import capstone.techmatrix.beacondetector.utils.Constants;
 import java.io.Serializable;
 import java.util.List;
 
-public class QDeals_MainActivity extends AppCompatActivity implements ToolbarTitle, ShowBackButton, FinishActivity {
+public class QDeals_MainActivity extends AppCompatActivity implements QdProdSubCategory.ChildCategories, ToolbarTitle, ShowBackButton, FinishActivity {
 
-
+    BottomNavigationView navigation;
+    DB_Handler db_handler;
     SessionManager sessionManager;
     Toolbar toolbar;
     TextView titleToolbar;
@@ -41,6 +52,7 @@ public class QDeals_MainActivity extends AppCompatActivity implements ToolbarTit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qdeals_activity_main);
 
+        db_handler = new DB_Handler(this);
         sessionManager = new SessionManager(this);
 
         // Set Toolbar
@@ -83,6 +95,58 @@ public class QDeals_MainActivity extends AppCompatActivity implements ToolbarTit
             }
         });
     }
+
+    /**
+     * BottomNavigationView Listener
+     */
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            // Hide Back Button
+            backButton.setVisibility(View.INVISIBLE);
+
+            // Prevent Reload Same Fragment
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+
+            switch (item.getItemId()) {
+                case R.id.nav_home: // Home
+                    // Prevent Reload
+                    try {
+                        if (!fm.findFragmentByTag("HOME").isVisible()) {
+                            callProductsFragment();
+                            titleToolbar.setText(R.string.TitleHome);
+                        }
+                    } catch (NullPointerException e) {
+                        callProductsFragment();
+                        titleToolbar.setText(R.string.TitleHome);
+                    }
+                    return true;
+
+                case R.id.nav_categories: // QdProdCategory
+                    ft.replace(R.id.content, new QdProdCategory());
+                    ft.commit();
+                    titleToolbar.setText(R.string.TitleCategories);
+                    return true;
+
+                case R.id.nav_shortlist: // Wish List
+                    ft.replace(R.id.content, new QdUserWishlist());
+                    ft.commit();
+                    titleToolbar.setText(R.string.TitleShortlist);
+                    return true;
+
+                case R.id.nav_account: // User QdUserAccount
+                    ft.replace(R.id.content, new QdUserAccount());
+                    ft.commit();
+                    titleToolbar.setText(R.string.TitleAccount);
+                    return true;
+            }
+            return false;
+        }
+    };
 
     // call products fragment
     private void callProductsFragment() {
@@ -148,6 +212,14 @@ public class QDeals_MainActivity extends AppCompatActivity implements ToolbarTit
         }
     }
 
+    /**
+     * Save Child QdProdCategory From Subcategory Fragment
+     * This is required by @backButtonClick method to restore state
+     */
+    @Override
+    public void saveChildCategories(List<Category> childCategories) {
+        this.childCategories = childCategories;
+    }
 
     @Override
     public void onBackPressed() {
