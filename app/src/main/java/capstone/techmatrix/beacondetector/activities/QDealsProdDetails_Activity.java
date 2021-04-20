@@ -169,7 +169,195 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
         }
     }
 
+    // Set Values
+    private void setValues() {
 
+        // QdUserWishlist Icon
+        final ImageView heart = findViewById(R.id.heart);
+        if (product.getShortlisted()) {
+            heart.setImageResource(R.drawable.ic_heart_grey);
+        }
+
+        // Wishlist Icon Click
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Add / Remove Item From Wish List
+                if (!product.getShortlisted()) {
+                    heart.setImageResource(R.drawable.ic_heart_grey);
+                    if (db_handler.shortlistItem(product.getId(), userEmail) > 0) {
+                        product.setShortlisted(true);
+                        Toast.makeText(getApplicationContext(), R.string.item_add_wishlist, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    heart.setImageResource(R.drawable.ic_heart_grey600_24dp);
+                    if (db_handler.removeShortlistedItem(product.getId(), userEmail)) {
+                        product.setShortlisted(false);
+                        Toast.makeText(getApplicationContext(), R.string.item_rem_wishlist, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+
+
+    }
+
+    private void setSizeLayout(final List<String> sizeList) {
+        sizeLay.removeAllViews();
+        try {
+            if (sizeList.size() > 0) {
+                for (int i = 0; i < sizeList.size(); i++) {
+                    final TextView size = new TextView(this);
+                    size.setText(sizeList.get(i));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        size.setBackground(getResources().getDrawable(R.drawable.border_grey));
+                    } else {
+                        size.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_grey));
+                    }
+
+                    // Change Border To Blue If Selected
+                    try {
+                        if (selectedSize.equals(sizeList.get(i))) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                size.setBackground(getResources().getDrawable(R.drawable.border_blue));
+                            } else {
+                                size.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_blue));
+                            }
+                        }
+                    } catch (NullPointerException ignore) {
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        size.setTextColor(getResources().getColor(R.color.black, null));
+                    } else {
+                        size.setTextColor(getResources().getColor(R.color.black));
+                    }
+                    size.setFocusableInTouchMode(false);
+                    size.setFocusable(true);
+                    size.setClickable(true);
+                    size.setTextSize(16);
+
+                    int dpValue = 8; // margin in dips
+                    float d = getResources().getDisplayMetrics().density;
+                    int margin = (int) (dpValue * d); // margin in pixels
+                    FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT,
+                            FlowLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(margin, margin, 0, 0);
+                    size.setLayoutParams(params);
+                    sizeLay.addView(size);
+
+                    // Size Click Listener
+                    size.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            TextView textView = (TextView) view;
+                            selectedSize = textView.getText().toString();
+                            selectedColor = null;
+                            selectedItemPrice = null;
+                            setSizeLayout(sizeList); // refresh to set selected
+
+                            // Get Color of Selected Size & Set Color Layout
+                            List<String> colorList = db_handler.getColorBySelectedSize(product.getId(), selectedSize);
+                            setColorLayout(colorList);
+                        }
+                    });
+                }
+            } else {
+                sizeParentLay.setVisibility(View.GONE);
+                selectedSize = "-";
+            }
+        } catch (NullPointerException e) {
+            sizeParentLay.setVisibility(View.GONE);
+            selectedSize = "-";
+        }
+    }
+
+    private void setColorLayout(final List<String> colorList) {
+        colorsLay.removeAllViews();
+        try {
+            if (colorList.size() > 0) {
+                for (int i = 0; i < colorList.size(); i++) {
+                    final TextView color = new TextView(this);
+                    color.setText(colorList.get(i));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        color.setBackground(getResources().getDrawable(R.drawable.border_grey));
+                    } else {
+                        color.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_grey));
+                    }
+
+                    // Change Border To Blue If Selected
+                    try {
+                        if (selectedColor.equals(colorList.get(i))) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                color.setBackground(getResources().getDrawable(R.drawable.border_blue));
+                            } else {
+                                color.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_blue));
+                            }
+                        }
+                    } catch (NullPointerException ignore) {
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        color.setTextColor(getResources().getColor(R.color.black, null));
+                    } else {
+                        color.setTextColor(getResources().getColor(R.color.black));
+                    }
+                    color.setFocusableInTouchMode(false);
+                    color.setFocusable(true);
+                    color.setClickable(true);
+                    color.setTextSize(16);
+
+                    int dpValue = 8; // margin in dips
+                    float d = getResources().getDisplayMetrics().density;
+                    int margin = (int) (dpValue * d); // margin in pixels
+                    FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT,
+                            FlowLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(margin, margin, 0, 0);
+                    color.setLayoutParams(params);
+                    colorsLay.addView(color);
+
+                    // Size Click Listener
+                    color.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onClick(View view) {
+
+                            try {
+                                // Get Selected Item Price
+                                if (selectedSize.equals("-") || selectedSize != null) {
+                                    TextView textView = (TextView) view;
+                                    selectedColor = textView.getText().toString();
+
+                                    Variant variant;
+                                    if (selectedSize.equals("-")) // no size for product
+                                    {
+                                        variant = db_handler.getProductVariant(product.getId(), null, selectedColor);
+                                        selectedItemPrice = variant.getPrice();
+                                    } else {
+                                        variant = db_handler.getProductVariant(product.getId(), selectedSize, selectedColor);
+                                        selectedItemPrice = variant.getPrice();
+                                    }
+
+                                    selectedItemVariantId = variant.getId();
+                                    price.setText("CAD " + selectedItemPrice);
+                                    setColorLayout(colorList); // reload to refresh background
+                                } else {
+                                    Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
+                                }
+                            } catch (NullPointerException e) {
+                                Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            } else {
+                colorParentLay.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
+            colorParentLay.setVisibility(View.GONE);
+        }
+    }
 
     // Quantity Update Listeners
     private void setQuantityUpdateListeners() {
