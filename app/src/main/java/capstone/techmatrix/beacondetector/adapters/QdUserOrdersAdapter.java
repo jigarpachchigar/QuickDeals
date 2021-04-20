@@ -79,6 +79,50 @@ public class QdUserOrdersAdapter extends BaseAdapter {
             holder.size.setVisibility(View.GONE);
         }
 
+        // Calculate Price Value
+        final int[] quantity = {shoppingCart.get(position).getItemQuantity()};
+        String taxName = shoppingCart.get(position).getProduct().getTax().getName();
+        final Double taxValue = shoppingCart.get(position).getProduct().getTax().getValue();
+        final Double priceValue = Double.valueOf(shoppingCart.get(position).getVariant().getPrice());
+
+        holder.qty.setVisibility(View.VISIBLE);
+        holder.qty.setText(String.valueOf("Quantity: "+quantity[0]));
+        holder.price.setText("CAD " + Util.formatDouble(calculatePrice(taxValue, priceValue, quantity[0])));
+        holder.tax.setText("("+taxName + ": CAD " + taxValue+")");
+
+        if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Iphone 6S")) {
+            holder.img.setImageResource(R.drawable.iphone6s);
+        }
+        else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Iphone 7")) {
+            holder.img.setImageResource(R.drawable.iphone7);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Iphone 6")) {
+            holder.img.setImageResource(R.drawable.iphone6);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Iphone 6S Plus")) {
+            holder.img.setImageResource(R.drawable.iphone6splus);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Iphone 7 Plus")) {
+            holder.img.setImageResource(R.drawable.iphone7plus);
+        }
+        else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Galaxy S7 Edge")) {
+            holder.img.setImageResource(R.drawable.galaxys7edge);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Galaxy J5")) {
+            holder.img.setImageResource(R.drawable.galaxyj5);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Galaxy J7")) {
+            holder.img.setImageResource(R.drawable.galaxyj7);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Galaxy Grand Prime")) {
+            holder.img.setImageResource(R.drawable.grandprime);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Note 4")) {
+            holder.img.setImageResource(R.drawable.samsungnote4);
+        }
+        else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Dell Inspiron Core")) {
+            holder.img.setImageResource(R.drawable.dellinspiron);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Dell Inspiron 11")) {
+            holder.img.setImageResource(R.drawable.dell11);
+        }
+        else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Satellite Pro")) {
+            holder.img.setImageResource(R.drawable.satpro);
+        }else if(shoppingCart.get(position).getProduct().getName().equalsIgnoreCase("Satellite P50")) {
+            holder.img.setImageResource(R.drawable.satp50);
+        }
 
 
         // Product Item Click
