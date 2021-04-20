@@ -174,7 +174,39 @@ public class QdshopcartAdapter extends BaseAdapter {
             }
         });
 
+        // Quantity Decrement Listener
+        holder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (quantity[0] != 1) {
+                    quantity[0]--;
+                    updateQuantity(quantity[0],position); // update in DB
+                    shoppingCart.get(position).setItemQuantity(quantity[0]);
+                    holder.qty.setText(String.valueOf(quantity[0]));
+                    holder.price.setText("CAD " + Util.formatDouble(calculatePrice(taxValue, priceValue, quantity[0])));
 
+                    if (context instanceof UpdatePayableAmount) {
+                        ((UpdatePayableAmount) context).updatePayableAmount(shoppingCart);
+                    }
+                }
+            }
+        });
+
+        // Quantity Increment Listener
+        holder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                quantity[0]++;
+                updateQuantity(quantity[0],position); // update in DB
+                shoppingCart.get(position).setItemQuantity(quantity[0]);
+                holder.qty.setText(String.valueOf(quantity[0]));
+                holder.price.setText("CAD" + Util.formatDouble(calculatePrice(taxValue, priceValue, quantity[0])));
+
+                if (context instanceof UpdatePayableAmount) {
+                    ((UpdatePayableAmount) context).updatePayableAmount(shoppingCart);
+                }
+            }
+        });
 
         return rowView;
     }
