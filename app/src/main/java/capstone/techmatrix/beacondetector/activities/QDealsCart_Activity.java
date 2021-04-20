@@ -66,9 +66,26 @@ public class QDealsCart_Activity extends AppCompatActivity implements Qdshopcart
         ListView listView = findViewById(R.id.listview);
         listView.setAdapter(new QdshopcartAdapter(this, shoppingCart));
 
+        setPayableAmount(shoppingCart);
 
+        // Order Button Click
+        Button placeOrder = findViewById(R.id.placeOrder);
+        placeOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // delete from cart and place order
+                db_handler.deleteCartItems();
+                db_handler.insertOrderHistory(shoppingCart,sessionManager.getSessionData(Constants.SESSION_EMAIL));
+                Toast.makeText(getApplicationContext(),"Order Placed Successfully",Toast.LENGTH_LONG).show();
 
-
+                // Call Main Activity
+                Intent intent = new Intent(getApplicationContext(), QDeals_MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(0,0);
+                finish();
+            }
+        });
     }
 
 
