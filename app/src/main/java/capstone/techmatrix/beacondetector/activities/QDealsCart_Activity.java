@@ -47,6 +47,16 @@ public class QDealsCart_Activity extends AppCompatActivity implements Qdshopcart
         ImageView cart = findViewById(R.id.cart);
         cart.setVisibility(View.GONE);
 
+        // Back Button
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
 
 
 
