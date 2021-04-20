@@ -66,6 +66,30 @@ public class QdProdSubCatAdapter extends BaseAdapter {
         holder.category = rowView.findViewById(R.id.name);
         holder.circleImageView = rowView.findViewById(R.id.image);
 
+        System.out.println("Sub Category Name :"+subCategoryList.get(position).getName());
+        if(subCategoryList.get(position).getName().equalsIgnoreCase("Mobiles")) {
+            holder.circleImageView.setImageResource(R.drawable.smartphone);
+            holder.category.setText("Phone");
+        }else if(subCategoryList.get(position).getName().equalsIgnoreCase("Laptops")){
+            holder.circleImageView.setImageResource(R.drawable.laptop);
+            holder.category.setText("Laptop & Desktop");
+        } else if (subCategoryList.get(position).getName().equalsIgnoreCase("Apple")){
+            holder.circleImageView.setImageResource(R.drawable.apple_logo);
+            holder.category.setText(subCategoryList.get(position).getName());
+        } else if(subCategoryList.get(position).getName().equalsIgnoreCase("Samsung")){
+            holder.circleImageView.setImageResource(R.drawable.samsung);
+            holder.category.setText(subCategoryList.get(position).getName());
+        }else if(subCategoryList.get(position).getName().equalsIgnoreCase("Dell")){
+            holder.circleImageView.setImageResource(R.drawable.dellchromebook);
+            holder.category.setText(subCategoryList.get(position).getName());
+        }else if(subCategoryList.get(position).getName().equalsIgnoreCase("Toshiba")){
+            holder.circleImageView.setImageResource(R.drawable.dell11);
+            holder.category.setText(subCategoryList.get(position).getName());
+        } else{
+            holder.circleImageView.setImageResource(R.drawable.ic_account_grey600_24dp);
+            holder.category.setText(subCategoryList.get(position).getName());
+        }
+
 
         holder.gridItemLayout = rowView.findViewById(R.id.gridItemLayouut);
         holder.gridItemLayout.setOnClickListener(new View.OnClickListener() {
