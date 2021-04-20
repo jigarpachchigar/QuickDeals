@@ -7,15 +7,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import capstone.techmatrix.beacondetector.database.DB_Handler;
 import capstone.techmatrix.beacondetector.database.SessionManager;
@@ -24,7 +26,6 @@ import capstone.techmatrix.beacondetector.fragments.QdUserSignup;
 import capstone.techmatrix.beacondetector.interfaces.FinishActivity;
 import capstone.techmatrix.beacondetector.service.SyncDBService;
 import capstone.techmatrix.beacondetector.utils.Constants;
-
 
 
 public class QDeals_SplashActivity extends AppCompatActivity implements FinishActivity {

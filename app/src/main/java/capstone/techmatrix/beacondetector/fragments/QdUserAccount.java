@@ -3,17 +3,18 @@ package capstone.techmatrix.beacondetector.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import capstone.techmatrix.beacondetector.QDeals_SplashActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import capstone.techmatrix.beacondetector.R;
+import capstone.techmatrix.beacondetector.QDeals_SplashActivity;
 import capstone.techmatrix.beacondetector.activities.QDealsOrders_Activity;
 import capstone.techmatrix.beacondetector.database.DB_Handler;
 import capstone.techmatrix.beacondetector.database.SessionManager;
@@ -23,10 +24,16 @@ import capstone.techmatrix.beacondetector.utils.Constants;
 
 public class QdUserAccount extends Fragment {
 
+    DB_Handler db_handler;
     TextView name, email, mobile;
     RelativeLayout orders, logoutLay;
     FinishActivity finishActivityCallback;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        finishActivityCallback = (FinishActivity) context;
+    }
 
     @Nullable
     @Override
@@ -34,6 +41,9 @@ public class QdUserAccount extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.qdeals_user_account, container, false);
 
+        // Get User
+        db_handler = new DB_Handler(getActivity());
+        SessionManager sessionManager = new SessionManager(getActivity());
         User user = db_handler.getUser(sessionManager.getSessionData(Constants.SESSION_EMAIL));
 
         // Set Values

@@ -823,6 +823,18 @@ public class DB_Handler extends SQLiteOpenHelper {
         return shoppingCart;
     }
 
+    // Delete Cart Item By Id
+    public boolean deleteCartItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(QDUserCart, ID + "=?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+    // Delete Cart Items
+    public void deleteCartItems() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(QDUserCart, null, null);
+    }
+
     // Get Cart Item Count
     public int getCartItemCount(String email) {
         // Select All Query
@@ -836,19 +848,6 @@ public class DB_Handler extends SQLiteOpenHelper {
 
         return count;
     }
-
-    // Delete Cart Item By Id
-    public boolean deleteCartItem(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(QDUserCart, ID + "=?", new String[]{String.valueOf(id)}) > 0;
-    }
-
-    // Delete Cart Items
-    public void deleteCartItems() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(QDUserCart, null, null);
-    }
-
 
     // Insert Order
     public void insertOrderHistory(List<Cart> shoppingCart, String email) {
@@ -910,5 +909,66 @@ public class DB_Handler extends SQLiteOpenHelper {
         return productList;
     }
 
+    // Check Product In Wish List
+    private boolean isShortlistedItem(int pdt_id, String email) {
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + QDWishlist + " WHERE " + EMAIL + "=? AND " + PDT_ID + "=?";
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{email, String.valueOf(pdt_id)});
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+        return false;
+    }
+
+    // Get Order History
+    public List<Cart> getOrders(String email) {
+        List<Cart> shoppingCart = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + QDUserOrder + " WHERE " + EMAIL + "=?";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{email});
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Cart cart = new Cart();
+                int id = cursor.getInt(cursor.getColumnIndex(ID));
+                int productId = cursor.getInt(cursor.getColumnIndex(PDT_ID));
+                int variantId = cursor.getInt(cursor.getColumnIndex(VAR_ID));
+                int quantity = cursor.getInt(cursor.getColumnIndex(QUANTITY));
+
+                Product product = getProductDetailsById(productId, email);
+                Variant variant = getVariantDetailsById(variantId);
+
+                cart.setId(id);
+                cart.setItemQuantity(quantity);
+                cart.setProduct(product);
+                cart.setVariant(variant);
+
+                // Adding to list
+                shoppingCart.add(cart);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        // return order items list
+        return shoppingCart;
+    }
+
+    // Update Cart Item Quantity
+    public void updateItemQuantity(int quantity, int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(QUANTITY, quantity);
+        db.update(QDUserCart, values, ID + "=?",
+                new String[]{String.valueOf(id)});
+        db.close();
+    }
 }
