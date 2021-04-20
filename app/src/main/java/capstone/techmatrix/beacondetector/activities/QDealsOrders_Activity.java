@@ -60,5 +60,9 @@ public class QDealsOrders_Activity extends AppCompatActivity {
         listView.setAdapter(new QdUserOrdersAdapter(this,orderHistory));
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0,0);
+    }
 }
