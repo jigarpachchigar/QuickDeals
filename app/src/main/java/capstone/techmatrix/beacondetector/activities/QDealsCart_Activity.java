@@ -106,7 +106,11 @@ public class QDealsCart_Activity extends AppCompatActivity implements Qdshopcart
         payable.setText("CAD "+formatter.format(totalAmount));
     }
 
-
+    // update payable amount
+    @Override
+    public void updatePayableAmount(List<Cart> shoppingCart) {
+        setPayableAmount(shoppingCart);
+    }
 
     // finish activity if cart empty
     @Override
