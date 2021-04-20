@@ -67,6 +67,17 @@ public class QdUserWishlistAdapter extends BaseAdapter {
         holder.title.setText(productList.get(position).getName());
         holder.price.setText(productList.get(position).getPrice_range());
 
+        // Product Item Click
+        holder.itemLay = rowView.findViewById(R.id.itemLay);
+        holder.itemLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, QDealsProdDetails_Activity.class);
+                intent.putExtra("ProductId", productList.get(position).getId());
+                context.startActivity(intent);
+            }
+        });
+
 
         return rowView;
     }
