@@ -43,6 +43,11 @@ public class QDealsCart_Activity extends AppCompatActivity implements Qdshopcart
         TextView titleToolbar = findViewById(R.id.titleToolbar);
         titleToolbar.setText(R.string.shopping_cart);
 
+        // Hide Cart Icon
+        ImageView cart = findViewById(R.id.cart);
+        cart.setVisibility(View.GONE);
+
+
 
 
 
