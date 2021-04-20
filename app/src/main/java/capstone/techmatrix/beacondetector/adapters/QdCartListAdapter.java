@@ -15,6 +15,7 @@ import capstone.techmatrix.beacondetector.utils.ExpandableHeightGridView;
 
 import java.util.List;
 
+
 public class QdCartListAdapter extends BaseAdapter {
 
     private Context context;
@@ -54,6 +55,13 @@ public class QdCartListAdapter extends BaseAdapter {
         rowView = inflater.inflate(R.layout.categories_list_item, null);
         holder.category = rowView.findViewById(R.id.category);
         holder.category.setText(categoryList.get(position).getName());
+
+        List<Category> subCategoryList = db_handler.getSubcategoryList(categoryList.get(position).getId());
+
+        // fill gridview with data
+        holder.expandableHeightGridView= rowView.findViewById(R.id.subcategories);
+        holder.expandableHeightGridView.setAdapter(new QdProdSubCatAdapter(context, subCategoryList));
+        holder.expandableHeightGridView.setExpanded(true);
 
         return rowView;
     }
