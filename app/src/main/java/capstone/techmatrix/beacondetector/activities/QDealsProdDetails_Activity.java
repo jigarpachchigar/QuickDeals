@@ -82,6 +82,7 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
     }
 
 
+
     // Set Toolbar Icons Click Listeners
     private void setToolbarIconsClickListeners() {
         ImageView cart = findViewById(R.id.cart);
@@ -98,7 +99,32 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
     }
 
 
-
+    // Get Item Adding To Cart Status
+    private boolean isSuccessAddingToCart(boolean isBuyNow) {
+        try {
+            // Get Selected Item Price
+            if (selectedSize.equals("-") || selectedSize != null) {
+                if (selectedColor != null) {
+                    long result = db_handler.insertIntoCart(product.getId(), selectedItemVariantId, selectedItemQuantity, userEmail);
+                    if (result > 0 || isBuyNow) {
+                        return true;
+                    } else {
+                        Toast.makeText(getApplicationContext(), R.string.item_exists, Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.color_select, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        } catch (NullPointerException e) {
+            Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
 
 
 
