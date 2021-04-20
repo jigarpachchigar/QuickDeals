@@ -27,7 +27,11 @@ public class QdUserWishlist extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.qdeals_prod_listview, container, false);
 
+        List<Product> productList = db_handler.getShortListedItems(sessionManager.getSessionData(Constants.SESSION_EMAIL));
 
+        // fill listview with data
+        ListView listView= view.findViewById(R.id.listview);
+        listView.setAdapter(new QdUserWishlistAdapter(getActivity(), productList));
         return view;
     }
 }
