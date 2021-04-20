@@ -91,6 +91,7 @@ public class QdProdSubCatAdapter extends BaseAdapter {
         }
 
 
+
         holder.gridItemLayout = rowView.findViewById(R.id.gridItemLayouut);
         holder.gridItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override

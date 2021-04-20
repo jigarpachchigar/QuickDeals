@@ -1,20 +1,22 @@
 package capstone.techmatrix.beacondetector.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import capstone.techmatrix.beacondetector.R;
 import capstone.techmatrix.beacondetector.adapters.QdCartListAdapter;
 import capstone.techmatrix.beacondetector.database.DB_Handler;
 import capstone.techmatrix.beacondetector.pojo.Category;
+
+import java.util.List;
 
 
 public class QdProdCategory extends Fragment {
@@ -25,7 +27,8 @@ public class QdProdCategory extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.qdeals_prod_listview, container, false);
 
-
+        // load products
+        DB_Handler db_handler = new DB_Handler(getActivity());
         List<Category> categoryList = db_handler.getCategoryList();
 
         // fill listview with data

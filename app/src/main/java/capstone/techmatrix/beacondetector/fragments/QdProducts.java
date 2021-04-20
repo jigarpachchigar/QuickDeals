@@ -3,9 +3,6 @@ package capstone.techmatrix.beacondetector.fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,28 +16,36 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import capstone.techmatrix.beacondetector.R;
+import capstone.techmatrix.beacondetector.adapters.QdSortProdAdapter;
+import capstone.techmatrix.beacondetector.adapters.QdProdtListAdapter;
+import capstone.techmatrix.beacondetector.adapters.QdProdSortAdapter;
+import capstone.techmatrix.beacondetector.database.DB_Handler;
+import capstone.techmatrix.beacondetector.database.SessionManager;
+import capstone.techmatrix.beacondetector.interfaces.ShowBackButton;
+import capstone.techmatrix.beacondetector.interfaces.ToolbarTitle;
+import capstone.techmatrix.beacondetector.pojo.Product;
+import capstone.techmatrix.beacondetector.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import capstone.techmatrix.beacondetector.R;
-import capstone.techmatrix.beacondetector.adapters.QdProdSortAdapter;
-import capstone.techmatrix.beacondetector.adapters.QdProdtListAdapter;
-import capstone.techmatrix.beacondetector.adapters.QdSortProdAdapter;
-
-import capstone.techmatrix.beacondetector.database.SessionManager;
-import capstone.techmatrix.beacondetector.interfaces.ShowBackButton;
-import capstone.techmatrix.beacondetector.interfaces.ToolbarTitle;
-import capstone.techmatrix.beacondetector.utils.Constants;
-
 public class QdProducts extends Fragment {
 
     RelativeLayout sort, filter;
-
+    TextView sortByText;
+    String[] sortByArray = {"Most Recent", "Most Orders", "Most Shares", "Most Viewed"};
     int sortById = 0, cat_id = 0;
     GridView productsGrid;
     List<String> sizeFilter = new ArrayList<>();
     List<String> colorFilter = new ArrayList<>();
+    QdProdtListAdapter productListAdapter;
+    List<Product> productList;
 
     ToolbarTitle toolbarTitleCallback;
     ShowBackButton showBackButtonCallback;
@@ -116,5 +121,143 @@ public class QdProducts extends Fragment {
         productsGrid.setAdapter(productListAdapter);
     }
 
+    // Set Sort Listener
+    private void setSortListener() {
+        sort.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("ConstantConditions")
+            @Override
+            public void onClick(View view) {
+                // Create Dialog
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.qdeals_prod_listview);
 
+                ListView listView = dialog.findViewById(R.id.listview);
+                listView.setAdapter(new QdProdSortAdapter(getActivity(), sortByArray, sortById));
+                listView.setDividerHeight(1);
+                listView.setFocusable(true);
+                listView.setClickable(true);
+                listView.setFocusableInTouchMode(false);
+                dialog.show();
+
+                // ListView Click Listener
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        sortById = i;
+                        sortByText.setText(sortByArray[sortById]);
+
+                        // Reload QdProducts List
+                        fillGridView();
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    // Set Filter Listener
+    private void setFilterListener() {
+        filter.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("ConstantConditions")
+            @Override
+            public void onClick(View view) {
+                // Create Dialog
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.filterlayout);
+
+                // Get Colors and Get Sizes
+                DB_Handler db_handler = new DB_Handler(getActivity());
+                final List<String> colors = db_handler.getAllColors();
+                final List<String> sizes = db_handler.getAllSizes();
+
+                // Add into hash map
+                HashMap<String, List<String>> listHashMap = new HashMap<>();
+                listHashMap.put("Size", sizes);
+                listHashMap.put("Color", colors);
+
+                // Add Headers
+                List<String> headers = new ArrayList<>();
+                headers.add("Size");
+                headers.add("Color");
+
+                final ExpandableListView listView = dialog.findViewById(R.id.expandableList);
+                final QdSortProdAdapter filterItemListAdapter = new QdSortProdAdapter(getActivity(), headers, listHashMap, sizeFilter, colorFilter);
+                listView.setAdapter(filterItemListAdapter);
+                listView.setDividerHeight(1);
+                listView.setFocusable(true);
+                listView.setClickable(true);
+                listView.setFocusableInTouchMode(false);
+                dialog.show();
+
+                // ListView Click Listener
+                listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    @Override
+                    public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
+                        switch (groupPosition) {
+                            case 0: // Size
+                                if (!sizeFilter.contains(sizes.get(childPosition))) {
+                                    sizeFilter.add(sizes.get(childPosition));
+                                } else {
+                                    sizeFilter.remove(sizes.get(childPosition));
+                                }
+                                break;
+
+                            case 1: // Color
+                                if (!colorFilter.contains("'" + colors.get(childPosition) + "'")) {
+                                    colorFilter.add("'" + colors.get(childPosition) + "'");
+                                } else {
+                                    colorFilter.remove("'" + colors.get(childPosition) + "'");
+                                }
+                                break;
+                        }
+                        filterItemListAdapter.notifyDataSetChanged();
+                        return false;
+                    }
+                });
+
+                // Filter Apply Button Click
+                Button apply = dialog.findViewById(R.id.apply);
+                apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        // Reload QdProducts List By Filter
+                        fillGridView();
+                        dialog.dismiss();
+                    }
+                });
+
+                // Clear All Button Click
+                Button clear = dialog.findViewById(R.id.clear);
+                clear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        try {
+                            sizeFilter.clear();
+                        } catch (NullPointerException ignore) {
+
+                        }
+
+                        try {
+                            colorFilter.clear();
+                        } catch (NullPointerException ignore) {
+
+                        }
+                        filterItemListAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                // Close Button
+                final ImageView close = dialog.findViewById(R.id.close);
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
 }
