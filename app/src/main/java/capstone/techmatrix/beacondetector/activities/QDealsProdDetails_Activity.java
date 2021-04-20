@@ -99,6 +99,7 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
     }
 
 
+
     // Get Item Adding To Cart Status
     private boolean isSuccessAddingToCart(boolean isBuyNow) {
         try {
@@ -127,7 +128,89 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
     }
 
 
+    private void setColorLayout(final List<String> colorList) {
+        colorsLay.removeAllViews();
+        try {
+            if (colorList.size() > 0) {
+                for (int i = 0; i < colorList.size(); i++) {
+                    final TextView color = new TextView(this);
+                    color.setText(colorList.get(i));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        color.setBackground(getResources().getDrawable(R.drawable.border_grey));
+                    } else {
+                        color.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_grey));
+                    }
 
+                    try {
+                        if (selectedColor.equals(colorList.get(i))) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                color.setBackground(getResources().getDrawable(R.drawable.border_blue));
+                            } else {
+                                color.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_blue));
+                            }
+                        }
+                    } catch (NullPointerException ignore) {
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        color.setTextColor(getResources().getColor(R.color.black, null));
+                    } else {
+                        color.setTextColor(getResources().getColor(R.color.black));
+                    }
+                    color.setFocusableInTouchMode(false);
+                    color.setFocusable(true);
+                    color.setClickable(true);
+                    color.setTextSize(16);
+
+                    int dpValue = 8; // margin in dips
+                    float d = getResources().getDisplayMetrics().density;
+                    int margin = (int) (dpValue * d); // margin in pixels
+                    FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT,
+                            FlowLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(margin, margin, 0, 0);
+                    color.setLayoutParams(params);
+                    colorsLay.addView(color);
+
+                    // Size Click Listener
+                    color.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onClick(View view) {
+
+                            try {
+                                // Get Selected Item Price
+                                if (selectedSize.equals("-") || selectedSize != null) {
+                                    TextView textView = (TextView) view;
+                                    selectedColor = textView.getText().toString();
+
+                                    Variant variant;
+                                    if (selectedSize.equals("-")) // no size for product
+                                    {
+                                        variant = db_handler.getProductVariant(product.getId(), null, selectedColor);
+                                        selectedItemPrice = variant.getPrice();
+                                    } else {
+                                        variant = db_handler.getProductVariant(product.getId(), selectedSize, selectedColor);
+                                        selectedItemPrice = variant.getPrice();
+                                    }
+
+                                    selectedItemVariantId = variant.getId();
+                                    price.setText("CAD " + selectedItemPrice);
+                                    setColorLayout(colorList); // reload to refresh background
+                                } else {
+                                    Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
+                                }
+                            } catch (NullPointerException e) {
+                                Toast.makeText(getApplicationContext(), R.string.size_select, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            } else {
+                colorParentLay.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
+            colorParentLay.setVisibility(View.GONE);
+        }
+    }
 
 
 
