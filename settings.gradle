@@ -1,2 +1,1 @@
 include ':app'
-rootProject.name = "Capstone_TechMatrix_BeaconDetector"
