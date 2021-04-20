@@ -54,7 +54,6 @@ public class QdUserWishlistAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
-
         // TODO Auto-generated method stub
         Holder holder = new Holder();
         View rowView;
@@ -78,6 +77,55 @@ public class QdUserWishlistAdapter extends BaseAdapter {
             }
         });
 
+
+
+        if(productList.get(position).getName().equalsIgnoreCase("Iphone 6S")) {
+            holder.img.setImageResource(R.drawable.iphone6s);
+        }
+        else if(productList.get(position).getName().equalsIgnoreCase("Iphone 7")) {
+            holder.img.setImageResource(R.drawable.iphone7);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Iphone 6")) {
+            holder.img.setImageResource(R.drawable.iphone6);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Iphone 6S Plus")) {
+            holder.img.setImageResource(R.drawable.iphone6splus);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Iphone 7 Plus")) {
+            holder.img.setImageResource(R.drawable.iphone7plus);
+        }
+        else if(productList.get(position).getName().equalsIgnoreCase("Galaxy S7 Edge")) {
+            holder.img.setImageResource(R.drawable.galaxys7edge);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Galaxy J5")) {
+            holder.img.setImageResource(R.drawable.galaxyj5);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Galaxy J7")) {
+            holder.img.setImageResource(R.drawable.galaxyj7);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Galaxy Grand Prime")) {
+            holder.img.setImageResource(R.drawable.grandprime);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Note 4")) {
+            holder.img.setImageResource(R.drawable.samsungnote4);
+        }
+        else if(productList.get(position).getName().equalsIgnoreCase("Dell Inspiron Core")) {
+            holder.img.setImageResource(R.drawable.dellinspiron);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Dell Inspiron 11")) {
+            holder.img.setImageResource(R.drawable.dell11);
+        }
+        else if(productList.get(position).getName().equalsIgnoreCase("Satellite Pro")) {
+            holder.img.setImageResource(R.drawable.satpro);
+        }else if(productList.get(position).getName().equalsIgnoreCase("Satellite P50")) {
+            holder.img.setImageResource(R.drawable.satp50);
+        }
+
+        // Wish List Item Click
+        holder.remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Remove Item From Wish List
+                DB_Handler db_handler = new DB_Handler(context);
+                SessionManager sessionManager = new SessionManager(context);
+                if (db_handler.removeShortlistedItem(productList.get(position).getId(), sessionManager.getSessionData(Constants.SESSION_EMAIL))) {
+                    productList.remove(position);
+                    notifyDataSetChanged();
+                }
+            }
+        });
 
         return rowView;
     }
