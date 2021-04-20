@@ -80,6 +80,7 @@ public class QdUserOrdersAdapter extends BaseAdapter {
         }
 
 
+
         // Product Item Click
         holder.itemLay = rowView.findViewById(R.id.itemLay);
         holder.itemLay.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +101,9 @@ public class QdUserOrdersAdapter extends BaseAdapter {
         return rowView;
     }
 
-
+    private Double calculatePrice(Double taxValue, Double priceValue, int quantity) {
+        return (taxValue + priceValue) * quantity;
+    }
 
     public class Holder {
         RelativeLayout itemLay;
