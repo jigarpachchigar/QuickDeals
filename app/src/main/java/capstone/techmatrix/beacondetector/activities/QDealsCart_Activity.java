@@ -57,7 +57,14 @@ public class QDealsCart_Activity extends AppCompatActivity implements Qdshopcart
             }
         });
 
+        // Get Cart Items
+        final SessionManager sessionManager = new SessionManager(this);
+        final DB_Handler db_handler = new DB_Handler(this);
+        final List<Cart> shoppingCart = db_handler.getCartItems(sessionManager.getSessionData(Constants.SESSION_EMAIL));
 
+        // Fill ListView With Items
+        ListView listView = findViewById(R.id.listview);
+        listView.setAdapter(new QdshopcartAdapter(this, shoppingCart));
 
 
 
