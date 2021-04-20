@@ -198,8 +198,20 @@ public class QDealsProdDetails_Activity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        updateCartCount();
     }
 
+    // Update Cart Item Count In Toolbar
+    private void updateCartCount() {
+        cartCount = db_handler.getCartItemCount(sessionManager.getSessionData(Constants.SESSION_EMAIL));
+        TextView count = findViewById(R.id.count);
+        if (cartCount > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText(String.valueOf(cartCount));
+        } else {
+            count.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onBackPressed() {
