@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "capstone.techmatrix.beacondetector"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -35,4 +35,10 @@ dependencies {
     implementation 'org.apmem.tools:layouts:1.10@aar'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
+
+    //Beacon library
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.altbeacon:android-beacon-library:2+'
+
+
 }
